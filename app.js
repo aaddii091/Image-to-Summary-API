@@ -82,6 +82,9 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("Post ho gaya ");
+});
 app.post("/", (req, res) => {
   res.send("Post ho gaya ");
 });

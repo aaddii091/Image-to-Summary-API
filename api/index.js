@@ -1,3 +1,10 @@
-import app from "../server";
+const app = require("./app");
+const dotenv = require("dotenv");
 
-export default app;
+dotenv.config({ path: "" });
+
+app.get("/", (req, res) => res.send("Express on Vercel"));
+
+app.listen(process.env.PORT, () => console.log("Server ready on port."));
+
+module.exports = app;

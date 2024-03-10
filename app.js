@@ -1,5 +1,6 @@
 const express = require("express");
 const fs = require("fs");
+const dotenv = require("dotenv").config();
 // const https = require("https");
 const multer = require("multer");
 const path = require("path");
@@ -11,7 +12,7 @@ const OpenAI = require("openai");
 const app = express();
 
 const openai = new OpenAI({
-  apiKey: "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",
+  apiKey: process.env.OPENAI_API,
 });
 
 // Saving the file from request

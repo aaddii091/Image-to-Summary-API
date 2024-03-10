@@ -1,5 +1,8 @@
 const app = require("./app");
+const dotenv = require("dotenv");
 
-app.listen(3069, () => {
+dotenv.config({ path: "" });
+
+app.listen(process.env.PORT, () => {
   console.log("Adrit ki maa ki chut");
 });

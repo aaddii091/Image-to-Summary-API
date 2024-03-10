@@ -48,7 +48,7 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
       formData,
       {
         headers: {
-          "X-Api-Key": "CNLzaGtaEKh2aiN/H/ATbw==0mgjhooozZ9FWtca",
+          "X-Api-Key": process.env.IMAGE_TO_TEXT_API,
           "Content-Type": "multipart/form-data",
           ...formData.getHeaders(),
         },

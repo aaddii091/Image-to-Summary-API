@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "express": "^4.18.3",
+    "nodemon": "^3.1.0"
+  },
+  "name": "test-api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js",
+    "build": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "webpack": "^5.90.3",
+    "webpack-cli": "^5.1.4"
+  }
+}

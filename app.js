@@ -1,10 +1,12 @@
 const express = require("express");
 const fs = require("fs");
-const dotenv = require("dotenv").config();
-// const https = require("https");
+const dotenv = require("dotenv");
+dotenv.config({ path: "./config.env" });
+
 const multer = require("multer");
 const path = require("path");
 const axios = require("axios");
+
 // we have to require form-data
 const FormData = require("form-data");
 const OpenAI = require("openai");
@@ -48,18 +50,22 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
       formData,
       {
         headers: {
-          "X-Api-Key": process.env.IMAGE_TO_TEXT_API,
+          "X-Api-Key": process.env.IMG_TO_TEXT_API,
           "Content-Type": "multipart/form-data",
           ...formData.getHeaders(),
         },
       }
     );
+
     // Adding the text coming from the upload document to uploadedText as an Array
+
     let uploadedText = [];
     response.data.map((res) => {
       uploadedText = uploadedText + " " + res.text;
     });
+
     //Sending the text to GPT for processing
+
     const messages = [
       { role: "user", content: `Pharaphrase the "${uploadedText}" in json` },
     ];
@@ -88,4 +94,5 @@ app.get("/", (req, res) => {
 app.post("/", (req, res) => {
   res.send("Post ho gaya ");
 });
+
 module.exports = app;

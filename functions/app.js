@@ -96,5 +96,5 @@ app.post("/", (req, res) => {
   res.send("Post ho gaya ");
 });
 
-app.use("/.netlify/functions/app.js", router);
+app.use("/.netlify/functions/app.js", app);
 module.exports.handler = serverless(app);

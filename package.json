@@ -4,6 +4,18 @@
     "dotenv": "^16.4.5",
     "express": "^4.18.3",
     "multer": "^1.4.5-lts.1",
-    "openai": "^4.28.4"
-  }
+    "netlify-cli": "^17.21.1",
+    "netlify-lambda": "^2.0.16",
+    "openai": "^4.28.4",
+    "serverless-http": "^3.2.0"
+  },
+  "name": "image-to-summary-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "netlify deploy --prod"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

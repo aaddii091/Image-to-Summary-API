@@ -1,7 +1,8 @@
+const serverless = require("serverless-http");
 const express = require("express");
 const fs = require("fs");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: "./../config.env" });
 
 const multer = require("multer");
 const path = require("path");
@@ -95,4 +96,5 @@ app.post("/", (req, res) => {
   res.send("Post ho gaya ");
 });
 
-module.exports = app;
+app.use("/.netlify/functions/app.js", router);
+module.exports.handler = serverless(app);

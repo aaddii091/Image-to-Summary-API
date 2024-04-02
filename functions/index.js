@@ -1,18 +1,21 @@
-const serverless = require("serverless-http");
+// const serverless = require("serverless-http");
+const functions = require("firebase-functions");
 const express = require("express");
 const fs = require("fs");
 const dotenv = require("dotenv");
-dotenv.config({ path: "./../config.env" });
+dotenv.config({ path: "./config.env" });
 
 const multer = require("multer");
 const path = require("path");
 const axios = require("axios");
+const bodyParser = require("body-parser");
 
 // we have to require form-data
 const FormData = require("form-data");
 const OpenAI = require("openai");
 
 const app = express();
+// const router = express.Router();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API,
@@ -20,8 +23,8 @@ const openai = new OpenAI({
 
 // Saving the file from request
 const upload = multer({
-  dest: "./uploads",
-  limits: { fileSize: 1000000 },
+  storage: multer.memoryStorage(), // Store file in memory
+  limits: { fileSize: 10 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const allowedExtensions = [".jpeg", ".png"];
     const extname = path.extname(file.originalname);
@@ -37,14 +40,10 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
   if (!req.file) {
     return res.status(400).send("Error: Image file required");
   }
-  const imagePath = path.join(
-    __dirname,
-    req.file.destination,
-    req.file.filename
-  );
+
   // Absolute path to saved image
   const formData = new FormData();
-  formData.append("image", fs.createReadStream(req.file.path));
+  formData.append("image", req.file.buffer);
   try {
     const response = await axios.post(
       "https://api.api-ninjas.com/v1/imagetotext",
@@ -68,7 +67,7 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
     //Sending the text to GPT for processing
 
     const messages = [
-      { role: "user", content: `Pharaphrase the "${uploadedText}" in json` },
+      { role: "user", content: `Paraphrase the "${uploadedText}" in json` },
     ];
 
     const GPTresponse = await openai.chat.completions.create({
@@ -79,22 +78,47 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
   } catch (error) {
     console.error("Error making API request:", error);
     res.status(500).send(error.message);
-  } finally {
-    fs.unlink(req.file.path, (err) => {
-      if (err) {
-        console.error("Error deleting file:", err);
-        return;
-      }
-    });
+  }
+  // finally {
+  //   fs.unlink(req.file.path, (err) => {
+  //     if (err) {
+  //       console.error("Error deleting file:", err);
+  //       return;
+  //     }
+  //   });
+  // }
+});
+
+// GET request handler
+app.get("/", (req, res) => {
+  try {
+    res.send("Post ho gaya ");
+  } catch (error) {
+    // console.error("Error handling GET request:", error);
+    res.status(500).send("Internal Server Error ", error.message);
   }
 });
 
-app.get("/", (req, res) => {
-  res.send("Post ho gaya ");
-});
+// POST request handler
 app.post("/", (req, res) => {
-  res.send("Post ho gaya ");
+  try {
+    res.send("Post ho gaya ");
+  } catch (error) {
+    // console.error("Error handling POST request:", error);
+    res.status(500).send("Internal Server Error", error.message);
+  }
 });
 
-app.use("/.netlify/functions/app.js", app);
-module.exports.handler = serverless(app);
+// app.use("/.netlify/functions/app", router);
+// module.exports.handler = serverless(app);
+app.use(bodyParser.urlencoded({ extended: false }));
+exports.summaryAPI = functions.https.onRequest(app);
+// const functions = require("firebase-functions");
+// const express = require("express");
+// // const cors = require("cors");
+// const app = express();
+// // app.use(cors({ origin: true }));
+// app.get("/ok", (req, res) => {
+//   res.send("Hello mkc chl gaya finally");
+// });
+// exports.expressApi = functions.https.onRequest(app);

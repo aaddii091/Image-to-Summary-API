@@ -48,3 +48,8 @@ Ensure you have Node.js and npm installed on your system. You can download them 
 
    ```bash
     firebase emulators:start --only functions
+
+#### Access to API docs 
+
+* [Postman]([[http://127.0.0.1:5001/register-555aa/us-central1/summaryAPI](https://us-central1-register-555aa.cloudfunctions.net/summaryAPI)](http://127.0.0.1:5001/register-555aa/us-central1/summaryAPI](https://us-central1-register-555aa.cloudfunctions.net/summaryAPI)))
+    

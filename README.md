@@ -37,6 +37,3 @@ Ensure you have Node.js and npm installed on your system. You can download them 
 5. for local deployment:
    ```bash
     firebase emulators:start --only functions
-
-
-

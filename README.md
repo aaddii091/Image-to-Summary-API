@@ -11,7 +11,10 @@ The Image Summary API is a powerful tool designed to convert images into text su
 
 To begin using the Image Summary API, follow these steps to set up your environment and make your first request.
 
-** Deployed on Google Functions Cloud **
+
+<span style="color:red">
+Deployed on Google Functions Cloud 
+</span>
 * [Click Here](http://127.0.0.1:5001/register-555aa/us-central1/summaryAPI)
 
 ### Prerequisites

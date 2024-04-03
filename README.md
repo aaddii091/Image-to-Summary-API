@@ -18,22 +18,27 @@ Ensure you have Node.js and npm installed on your system. You can download them 
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://your-repository-url/image-summary-api.git
 
-2. Navigate to the project directory:
+3. Navigate to the project directory:
+
    ```bash
    cd image-summary-api
 
-3. Install the required dependencies:
+5. Install the required dependencies:
+
    ```bash
    npm install
 
-4. Set up your environment variables by creating a Config.env file in the root directory with the following content:
+7. Set up your environment variables by creating a Config.env file in the root directory with the following content:
+
    ```bash
    OPENAI_API=<Your_OpenAI_API_Key>
    IMG_TO_TEXT_API=<Your_Image_to_Text_API_Key>
 
-5. for local deployment:
+9. for local deployment:
+
    ```bash
     firebase emulators:start --only functions

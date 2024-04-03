@@ -13,7 +13,7 @@ To begin using the Image Summary API, follow these steps to set up your environm
 
 
 
-#### Deployed on Google Functions Cloud [Click Here]([http://127.0.0.1:5001/register-555aa/us-central1/summaryAPI](https://us-central1-register-555aa.cloudfunctions.net/summaryAPI))
+#### Deployed on Google Functions Cloud [Click Here](https://us-central1-register-555aa.cloudfunctions.net/summaryAPI)
 
 ### Prerequisites
 

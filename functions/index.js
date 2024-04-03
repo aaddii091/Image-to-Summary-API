@@ -1,49 +1,36 @@
-// const serverless = require("serverless-http");
 const functions = require("firebase-functions");
 const express = require("express");
 const fs = require("fs");
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
 
-const multer = require("multer");
-const path = require("path");
 const axios = require("axios");
 const bodyParser = require("body-parser");
 
-// we have to require form-data
 const FormData = require("form-data");
 const OpenAI = require("openai");
 
+const fileParser = require("express-multipart-file-parser");
+
 const app = express();
-// const router = express.Router();
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API,
 });
 
-// Saving the file from request
-const upload = multer({
-  storage: multer.memoryStorage(), // Store file in memory
-  limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: (req, file, cb) => {
-    const allowedExtensions = [".jpeg", ".png"];
-    const extname = path.extname(file.originalname);
-    if (allowedExtensions.includes(extname)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only JPEG AND PNG format is allowed"));
-    }
-  },
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(fileParser);
 
-app.post("/upload-image", upload.single("image"), async (req, res) => {
-  if (!req.file) {
+app.post("/upload-image", async (req, res) => {
+  if (!req.files[0].buffer) {
     return res.status(400).send("Error: Image file required");
   }
 
   // Absolute path to saved image
+
   const formData = new FormData();
-  formData.append("image", req.file.buffer);
+  formData.append("image", req.files[0].buffer);
+
   try {
     const response = await axios.post(
       "https://api.api-ninjas.com/v1/imagetotext",
@@ -57,14 +44,10 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
       }
     );
 
-    // Adding the text coming from the upload document to uploadedText as an Array
-
-    let uploadedText = [];
-    response.data.map((res) => {
-      uploadedText = uploadedText + " " + res.text;
+    let uploadedText = "";
+    response.data.forEach((res) => {
+      uploadedText += " " + res.text;
     });
-
-    //Sending the text to GPT for processing
 
     const messages = [
       { role: "user", content: `Paraphrase the "${uploadedText}" in json` },
@@ -79,46 +62,22 @@ app.post("/upload-image", upload.single("image"), async (req, res) => {
     console.error("Error making API request:", error);
     res.status(500).send(error.message);
   }
-  // finally {
-  //   fs.unlink(req.file.path, (err) => {
-  //     if (err) {
-  //       console.error("Error deleting file:", err);
-  //       return;
-  //     }
-  //   });
-  // }
 });
 
-// GET request handler
 app.get("/", (req, res) => {
   try {
     res.send("Post ho gaya ");
   } catch (error) {
-    // console.error("Error handling GET request:", error);
     res.status(500).send("Internal Server Error ", error.message);
   }
 });
 
-// POST request handler
 app.post("/", (req, res) => {
   try {
     res.send("Post ho gaya ");
   } catch (error) {
-    // console.error("Error handling POST request:", error);
     res.status(500).send("Internal Server Error", error.message);
   }
 });
 
-// app.use("/.netlify/functions/app", router);
-// module.exports.handler = serverless(app);
-app.use(bodyParser.urlencoded({ extended: false }));
 exports.summaryAPI = functions.https.onRequest(app);
-// const functions = require("firebase-functions");
-// const express = require("express");
-// // const cors = require("cors");
-// const app = express();
-// // app.use(cors({ origin: true }));
-// app.get("/ok", (req, res) => {
-//   res.send("Hello mkc chl gaya finally");
-// });
-// exports.expressApi = functions.https.onRequest(app);
